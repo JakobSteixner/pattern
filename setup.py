@@ -137,15 +137,17 @@ setup(
     install_requires = [
         "future",
         "backports.csv",
-        "mysqlclient",
+        # WIP
+        # "mysqlclient", hack for a specific use case - DO NOT PULL
         "beautifulsoup4",
         "lxml",
         "feedparser",
+        "more-itertools==5.0.0" if sys.version < "3" else "more-itertools",
         "pdfminer" if sys.version < "3" else "pdfminer.six",
-        "numpy",
+        "numpy==1.16.4" if sys.version < "3" else "numpy",
         "scipy" if sys.version >= "3" else "scipy==1.2.1",
         "nltk",
-        "python-docx",
+        # "python-docx", hack for a specific use case - DO NOT PULL
         "cherrypy" if sys.version >= "3" else "cherrypy==17.4.1",
         "requests"
     ],
