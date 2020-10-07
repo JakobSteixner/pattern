@@ -662,25 +662,22 @@ class Verbs(_Verbs):
             else:
                 sattelites = ''
         except Exception as e:
-            print(f'Error in decomposition: {e}')
-            raise e
+            sattelites = ''
 
         return verb, sattelites
 
     def tenses(self, verb, parse=True):
-        print(f'result without decomposition: {_Verbs.tenses(self, verb, parse=parse)}')
-        print(f'parse is {parse}')
-        print(f'verb before decomposition is {verb}')
         if parse:
             verb, _ = self.decompose_particle_verb(verb)
-            print(f'verb after decomposition is {verb}')
         return _Verbs.tenses(self, verb, parse=parse)
 
     def lemma(self, verb, parse=True):
         if parse:
             verb, sattelites = self.decompose_particle_verb(verb)
             lemmatized = _Verbs.lemma(self, verb, parse=parse)
-            return ' '.join([lemmatized, sattelites])
+            if sattelites:
+                return ' '.join([lemmatized, sattelites])
+            return lemmatized
         else:
             return _Verbs.lemma(self, verb, parse=parse)
 
@@ -739,7 +736,7 @@ class Verbs(_Verbs):
     def conjugate(self, verb, *args, **kwargs):
         verb, sattelites = self.decompose_particle_verb(verb)
         conjugated_verb = _Verbs.conjugate(self, verb, *args, **kwargs)
-        return ' '.join([conjugated_verb + sattelites])
+        return ' '.join([conjugated_verb, sattelites])
 
     def find_lexeme(self, verb):
         """ For a regular verb (base form), returns the forms using a rule-based approach.
@@ -862,7 +859,3 @@ def attributive(adjective):
 
 def predicative(adjective):
     return adjective
-
-if __name__ == '__main__':
-    print(lemma('dropping dead'))
-    print(conjugate('drop dead', list(tenses('dies'))[0]))
